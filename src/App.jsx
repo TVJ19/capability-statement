@@ -65,7 +65,7 @@ const StatsGrid = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ delay: i * 0.1, type: "spring", stiffness: 50, damping: 20 }}
+          transition={{ delay: i * 0.1, type: "tween", ease: "easeOut", duration: 0.8 }}
           className="glass-card shimmer-border"
           style={{ textAlign: 'center', padding: '2rem' }}
         >
@@ -158,20 +158,8 @@ const Typewriter = ({ text, active }) => {
   return <span>{display}</span>;
 }
 
-const GrainOverlay = () => (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    zIndex: 9999,
-    opacity: 0.03,
-    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-    mixBlendMode: 'overlay'
-  }} />
-);
+// GrainOverlay removed for performance stability
+// const GrainOverlay = () => ...
 
 const PitchCard = ({ title, subtitle, icon: Icon, color, strategicValue, children }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -187,7 +175,7 @@ const PitchCard = ({ title, subtitle, icon: Icon, color, strategicValue, childre
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       whileHover={{ y: -5 }}
-      transition={{ type: "spring", stiffness: 50, damping: 20 }}
+      transition={{ type: "tween", ease: "easeOut", duration: 0.8 }}
       className="glass-card spotlight-card"
       onMouseMove={handleMouseMove}
       style={{
@@ -236,7 +224,7 @@ const CapabilityCard = ({ icon: Icon, title, desc, features, strategicValue, del
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay, type: "spring", stiffness: 50, damping: 20 }}
+      transition={{ delay, type: "tween", ease: "easeOut", duration: 0.8 }}
       viewport={{ once: true, margin: "-50px" }}
       className="glass-card spotlight-card"
       onMouseMove={handleMouseMove}
@@ -383,7 +371,7 @@ const TechStackGrid = () => {
             initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, type: "spring" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             style={{ display: 'flex', flexDirection: i % 2 === 0 ? 'row' : 'row-reverse', alignItems: 'center', gap: '4rem' }}
           >
             {/* LABEL */}
@@ -642,7 +630,10 @@ const App = () => {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    const lenis = new Lenis()
+    const lenis = new Lenis({
+      lerp: 0.1,
+      smoothWheel: true
+    })
 
     function raf(time) {
       lenis.raf(time)
@@ -668,7 +659,7 @@ const App = () => {
   return (
     <div style={{ paddingBottom: '20vh', cursor: 'none' }}>
       <CustomCursor />
-      <GrainOverlay />
+      {/* <GrainOverlay /> REMOVED FOR PERFORMANCE */}
       <AuroraBackground />
 
       {/* --- HERO (Phase A: Authority) --- */}
