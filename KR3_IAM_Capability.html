@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KR3 Information Systems | Enterprise IAM & PAM Capability Statement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-tertiary: #16161f;
+            --bg-card: #1a1a24;
+            --accent-cyan: #00d4ff;
+            --accent-blue: #4169ff;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-pink: #ec4899;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: rgba(255,255,255,0.08);
+            --gradient-hero: linear-gradient(135deg, #00d4ff 0%, #4169ff 50%, #8b5cf6 100%);
+            --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, rgba(0, 212, 255, 0.15) 0px, transparent 50%),
+                            radial-gradient(at 80% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                            radial-gradient(at 0% 50%, rgba(65, 105, 255, 0.15) 0px, transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .floating-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 700px;
+            height: 700px;
+            background: var(--accent-cyan);
+            top: -250px;
+            right: -250px;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent-purple);
+            bottom: -200px;
+            left: -200px;
+            animation: float 30s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-blue);
+            top: 50%;
+            left: 30%;
+            animation: float 22s ease-in-out infinite;
+        }
+
+        .orb-4 {
+            width: 450px;
+            height: 450px;
+            background: var(--accent-pink);
+            top: 20%;
+            right: 20%;
+            animation: float 28s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(40px, -40px) rotate(5deg) scale(1.05); }
+            50% { transform: translate(-30px, 30px) rotate(-5deg) scale(0.95); }
+            75% { transform: translate(30px, 40px) rotate(3deg) scale(1.02); }
+        }
+
+        /* Header with Glass Morphism */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            padding: 0.75rem 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: var(--gradient-hero);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.35rem;
+            letter-spacing: -1px;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .logo-text span {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-hero);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .credentials-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 1.25rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Hero Section - Enhanced */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 10rem 2rem 6rem;
+            z-index: 1;
+            background: var(--gradient-mesh);
+        }
+
+        .hero-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.65rem 1.25rem;
+            background: rgba(0, 212, 255, 0.12);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 2rem;
+            animation: pulse 3s ease-in-out infinite;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.5); }
+            50% { box-shadow: 0 0 0 15px rgba(0, 212, 255, 0); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-title .gradient-text {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2.5rem;
+            margin-top: 5rem;
+            padding-top: 5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        /* Section Styles - Enhanced */
+        .section {
+            position: relative;
+            padding: 8rem 2rem;
+            z-index: 1;
+        }
+
+        .section-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent-cyan);
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: var(--gradient-hero);
+        }
+
+        .section-label::before {
+            right: calc(100% + 15px);
+        }
+
+        .section-label::after {
+            left: calc(100% + 15px);
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .section-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Tech Stack Grid - Enhanced */
+        .tech-stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .tech-card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 3rem;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-accent, var(--gradient-hero));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: -1;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .tech-card:hover::before,
+        .tech-card:hover::after {
+            opacity: 1;
+        }
+
+        .tech-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .tech-icon.strongdm { background: linear-gradient(135deg, #00c853, #1de9b6); color: #fff; }
+        .tech-icon.akeyless { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; }
+        .tech-icon.entra { background: linear-gradient(135deg, #0078d4, #00a4ef); color: #fff; }
+        .tech-icon.azure { background: linear-gradient(135deg, #0089d6, #00bfff); color: #fff; }
+        .tech-icon.gcp { background: linear-gradient(135deg, #4285f4, #34a853); color: #fff; }
+        .tech-icon.aws { background: linear-gradient(135deg, #ff9900, #ff6600); color: #fff; }
+        .tech-icon.cyberark { background: linear-gradient(135deg, #d4145a, #ff6b6b); color: #fff; }
+        .tech-icon.sailpoint { background: linear-gradient(135deg, #0057b8, #00a3e0); color: #fff; }
+        .tech-icon.intune { background: linear-gradient(135deg, #0078d4, #50e6ff); color: #fff; }
+        .tech-icon.pingfed { background: linear-gradient(135deg, #e31c3d, #ff6b9d); color: #fff; }
+        .tech-icon.sspr { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        .tech-icon.genpt { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+        .tech-icon.automation { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; }
+
+        .tech-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .tech-category {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .tech-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .tech-features {
+            list-style: none;
+        }
+
+        .tech-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .tech-features li:hover {
+            color: var(--text-primary);
+            padding-left: 0.5rem;
+        }
+
+        .tech-features li:last-child {
+            border-bottom: none;
+        }
+
+        .tech-features li i {
+            color: var(--accent-green);
+            margin-top: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            background: rgba(255,255,255,0.08);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-top: 1.5rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        /* Capabilities Matrix - Enhanced */
+        .capabilities-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5px;
+            background: var(--border-color);
+            border-radius: 28px;
+            overflow: hidden;
+            margin-top: 5rem;
+        }
+
+        .capability-cell {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-hero);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .capability-cell:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .capability-cell:hover::before {
+            opacity: 0.05;
+        }
+
+        .capability-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.25rem;
+            background: rgba(0, 212, 255, 0.12);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: var(--accent-cyan);
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s;
+        }
+
+        .capability-cell:hover .capability-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .capability-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.65rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .capability-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Enhanced Architecture Section */
+        .architecture-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
+            padding: 4rem;
+            margin-top: 4rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .arch-diagram {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr 1.2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .arch-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .arch-node {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arch-node::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-hero);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .arch-node:hover {
+            border-color: var(--accent-cyan);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .arch-node:hover::before {
+            opacity: 0.05;
+        }
+
+        .arch-node-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-node-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-center {
+            background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(139,92,246,0.15));
+            border: 2px solid var(--accent-cyan);
+            border-radius: 28px;
+            padding: 3.5rem;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.3);
+        }
+
+        .arch-center-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .arch-center-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .tech-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .tech-mini-badge {
+            background: rgba(255,255,255,0.08);
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tech-mini-badge:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Value Proposition - Enhanced */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3.5rem;
+            margin-top: 4rem;
+        }
+
+        .value-card {
+            background: var(--gradient-card), var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+
+        .value-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%);
+            opacity: 0.05;
+            transform: translate(50%, -50%);
+            transition: opacity 0.5s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .value-card:hover::after {
+            opacity: 0.1;
+        }
+
+        .value-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .value-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .value-desc {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Company Info - Enhanced */
+        .company-section {
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        .company-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .company-content h3 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -1.5px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .company-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.75rem;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.75rem;
+        }
+
+        .credential-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.75rem;
+            transition: all 0.3s;
+        }
+
+        .credential-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+        }
+
+        .credential-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.65rem;
+            font-weight: 700;
+        }
+
+        .credential-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+        }
+
+        /* Automation Showcase - Enhanced */
+        .automation-showcase {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            overflow: hidden;
+            margin-top: 4rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .automation-header {
+            background: var(--bg-tertiary);
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .window-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .window-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .window-dot.red { background: #ef4444; }
+        .window-dot.yellow { background: #f59e0b; }
+        .window-dot.green { background: #10b981; }
+
+        .automation-content {
+            padding: 2.5rem;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-comment { color: #6b7280; }
+        .code-keyword { color: #f472b6; }
+        .code-string { color: #34d399; }
+        .code-function { color: #60a5fa; }
+        .code-variable { color: #fbbf24; }
+
+        /* CTA Section - Enhanced */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(139,92,246,0.15) 100%);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cta-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .cta-desc {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 2.5rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-hero);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+        }
+
+        /* Footer - Enhanced */
+        .footer {
+            padding: 5rem 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 5rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .footer-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-cyan);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            max-width: 1600px;
+            margin: 4rem auto 0;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive - Enhanced */
+        @media (max-width: 1200px) {
+            .hero-stats { grid-template-columns: repeat(3, 1fr); }
+            .tech-stack-grid { grid-template-columns: 1fr; }
+            .capabilities-matrix { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .capabilities-matrix { grid-template-columns: repeat(2, 1fr); }
+            .value-grid { grid-template-columns: 1fr; }
+            .company-grid { grid-template-columns: 1fr; }
+            .arch-diagram { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            .nav-links { display: none; }
+            .hero-stats { grid-template-columns: 1fr; }
+            .capabilities-matrix { grid-template-columns: 1fr; }
+            .credentials-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            .tech-grid-mini { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Print Styles */
+        @media print {
+            .bg-grid, .floating-orb, .header { display: none; }
+            .hero { min-height: auto; padding-top: 2rem; }
+            body { background: white; color: black; }
+            .section { padding: 2rem 0; }
+        }
+
+        /* Animations - Enhanced */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="floating-orb orb-4"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">KR3</div>
+                <div class="logo-text"><span>KR3</span> Information Systems</div>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#capabilities">Capabilities</a></li>
+                    <li><a href="#technology">Technology</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#value">Value</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="credentials-badge">
+                <i class="fas fa-award"></i>
+                Inc. 5000 | #18 Fastest Growing SE
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-shield-halved"></i>
+                Enterprise Identity & Access Management Excellence
+            </div>
+            <h1 class="hero-title">
+                Zero Trust.<br>
+                <span class="gradient-text">Zero Compromise.</span><br>
+                Infinite Scale.
+            </h1>
+            <p class="hero-subtitle">
+                End-to-end IAM/PAM Deployment & L4 Operations for Fortune 500 enterprises. 
+                We architect, deploy, and operate the most sophisticated identity security 
+                ecosystems—securing millions of identities across hybrid, multi-cloud, 
+                and legacy infrastructure with unparalleled expertise.
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">12+</div>
+                    <div class="stat-label">Enterprise IAM/PAM Platforms</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">L4 Operations Support</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Automation Coverage</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">F500</div>
+                    <div class="stat-label">Enterprise Grade</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">ZSP</div>
+                    <div class="stat-label">Zero Standing Privileges</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Capabilities -->
+    <section class="section" id="capabilities">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Core Capabilities</div>
+                <h2 class="section-title">The Complete IAM & PAM Operational Framework</h2>
+                <p class="section-desc">
+                    Full-spectrum identity security operations—from infrastructure deployment 
+                    to 24/7 L4 managed services, all unified under a single operational model 
+                    with deep technical expertise across every platform.
+                </p>
+            </div>
+
+            <div class="capabilities-matrix">
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="capability-title">Deployment & Integration</div>
+                    <div class="capability-desc">Enterprise-scale rollout across hybrid environments</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="capability-title">L4 Operations & Monitoring</div>
+                    <div class="capability-desc">24/7 SOC-aligned identity operations</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-robot"></i></div>
+                    <div class="capability-title">Automation & Orchestration</div>
+                    <div class="capability-desc">Infrastructure-as-Code for identity systems</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-sync"></i></div>
+                    <div class="capability-title">Lifecycle Management</div>
+                    <div class="capability-desc">Joiner-Mover-Leaver automation</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-file-shield"></i></div>
+                    <div class="capability-title">Compliance & Governance</div>
+                    <div class="capability-desc">SOX, HIPAA, PCI-DSS, FedRAMP alignment</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-key"></i></div>
+                    <div class="capability-title">Secrets Management</div>
+                    <div class="capability-desc">Centralized vault operations & rotation</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-user-shield"></i></div>
+                    <div class="capability-title">Privileged Access Control</div>
+                    <div class="capability-desc">Zero Standing Privileges enforcement</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-cloud"></i></div>
+                    <div class="capability-title">Multi-Cloud Security</div>
+                    <div class="capability-desc">Azure, GCP, AWS identity federation</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="capability-title">Analytics & Intelligence</div>
+                    <div class="capability-desc">Identity threat detection & response</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="capability-title">Device Management</div>
+                    <div class="capability-desc">Endpoint security & compliance</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-network-wired"></i></div>
+                    <div class="capability-title">Federation & SSO</div>
+                    <div class="capability-desc">Seamless authentication across platforms</div>
+                </div>
+                <div class="capability-cell">
+                    <div class="capability-icon"><i class="fas fa-fingerprint"></i></div>
+                    <div class="capability-title">MFA & Authentication</div>
+                    <div class="capability-desc">Multi-factor security implementation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="section" id="technology" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Technology Excellence</div>
+                <h2 class="section-title">Enterprise IAM & PAM Technology Stack</h2>
+                <p class="section-desc">
+                    Deep L4 operational expertise across the industry's most critical 
+                    identity and privileged access management platforms. Our team delivers 
+                    expert-level support, configuration, and optimization for every technology.
+                </p>
+            </div>
+
+            <div class="tech-stack-grid">
+                <!-- StrongDM -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon strongdm"><i class="fas fa-network-wired"></i></div>
+                        <div>
+                            <h3 class="tech-title">StrongDM</h3>
+                            <div class="tech-category">Infrastructure Access Platform</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Zero Trust infrastructure access management with comprehensive audit trails, 
+                        real-time session monitoring, and policy-driven access controls for databases, 
+                        servers, and Kubernetes clusters across hybrid environments.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Zero-Trust PAM with continuous verification</li>
+                        <li><i class="fas fa-check"></i>Agentless architecture deployment & configuration</li>
+                        <li><i class="fas fa-check"></i>Just-in-Time access provisioning</li>
+                        <li><i class="fas fa-check"></i>Complete session recording (SSH, RDP, K8s)</li>
+                        <li><i class="fas fa-check"></i>RBAC/ABAC policy engine management</li>
+                        <li><i class="fas fa-check"></i>SIEM integration & audit log streaming</li>
+                    </ul>
+                    <div class="tech-badge">L4 Expert Support</div>
+                </div>
+
+                <!-- Akeyless PAM -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon akeyless"><i class="fas fa-vault"></i></div>
+                        <div>
+                            <h3 class="tech-title">Akeyless PAM</h3>
+                            <div class="tech-category">Modern Privileged Access Management</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Cloud-native PAM with Zero Standing Privileges, ephemeral credential generation, 
+                        and patented Distributed Fragments Cryptography (DFC™) for true zero-knowledge 
+                        secrets management across human and machine identities.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Zero Standing Privilege (ZSP) implementation</li>
+                        <li><i class="fas fa-check"></i>Dynamic secrets & auto-rotation workflows</li>
+                        <li><i class="fas fa-check"></i>Secure Remote Access (SRA) configuration</li>
+                        <li><i class="fas fa-check"></i>Certificate Lifecycle Management (CLM)</li>
+                        <li><i class="fas fa-check"></i>Native cloud IAM integration (AWS, Azure, GCP)</li>
+                        <li><i class="fas fa-check"></i>SPIFFE/SPIRE workload identity support</li>
+                    </ul>
+                    <div class="tech-badge">Zero-Knowledge Encryption</div>
+                </div>
+
+                <!-- Microsoft Entra ID -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon entra"><i class="fab fa-microsoft"></i></div>
+                        <div>
+                            <h3 class="tech-title">Microsoft Entra ID</h3>
+                            <div class="tech-category">Enterprise Identity Platform</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Comprehensive identity and access management for Microsoft ecosystem 
+                        and beyond. Conditional Access policies, Identity Protection, Governance, 
+                        and seamless integration with Azure workloads and SaaS applications.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Conditional Access policy engineering</li>
+                        <li><i class="fas fa-check"></i>Identity Protection & risk-based authentication</li>
+                        <li><i class="fas fa-check"></i>Privileged Identity Management (PIM) operations</li>
+                        <li><i class="fas fa-check"></i>Entitlement Management & Access Reviews</li>
+                        <li><i class="fas fa-check"></i>B2B/B2C External Identity configuration</li>
+                        <li><i class="fas fa-check"></i>Verified ID credential management</li>
+                    </ul>
+                    <div class="tech-badge">Zero Trust Foundation</div>
+                </div>
+
+                <!-- Azure Cloud Security -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon azure"><i class="fas fa-cloud-bolt"></i></div>
+                        <div>
+                            <h3 class="tech-title">Azure Cloud Security</h3>
+                            <div class="tech-category">Cloud IAM & RBAC</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Enterprise Azure security architecture including RBAC design, 
+                        managed identities, Key Vault operations, and comprehensive 
+                        cloud security posture management aligned with Well-Architected Framework.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Azure RBAC architecture & custom role design</li>
+                        <li><i class="fas fa-check"></i>Managed Identity deployment & governance</li>
+                        <li><i class="fas fa-check"></i>Key Vault operations & secret rotation</li>
+                        <li><i class="fas fa-check"></i>Microsoft Defender for Cloud integration</li>
+                        <li><i class="fas fa-check"></i>Landing Zone identity architecture</li>
+                        <li><i class="fas fa-check"></i>Just-in-Time VM access configuration</li>
+                    </ul>
+                    <div class="tech-badge">Multi-Cloud Ready</div>
+                </div>
+
+                <!-- GCP Cloud IAM -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon gcp"><i class="fab fa-google"></i></div>
+                        <div>
+                            <h3 class="tech-title">GCP Cloud IAM & Secret Manager</h3>
+                            <div class="tech-category">Google Cloud Security</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Centralized secrets management and IAM for Google Cloud workloads with 
+                        fine-grained access controls, automatic rotation, regional compliance, 
+                        and seamless integration with GKE, Cloud Functions, and Cloud Run.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Secret lifecycle management & versioning</li>
+                        <li><i class="fas fa-check"></i>Automated rotation with Cloud Functions</li>
+                        <li><i class="fas fa-check"></i>Cloud IAM policy design & enforcement</li>
+                        <li><i class="fas fa-check"></i>Regional secrets for data residency</li>
+                        <li><i class="fas fa-check"></i>CMEK integration with Cloud KMS</li>
+                        <li><i class="fas fa-check"></i>GKE Secret Store CSI Driver setup</li>
+                    </ul>
+                    <div class="tech-badge">AES-256 Encryption</div>
+                </div>
+
+                <!-- AWS IAM -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon aws"><i class="fab fa-aws"></i></div>
+                        <div>
+                            <h3 class="tech-title">AWS IAM & Secrets Manager</h3>
+                            <div class="tech-category">Amazon Web Services Security</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Comprehensive AWS identity and access management with IAM policies, 
+                        roles, and permissions. Secrets Manager integration for secure credential 
+                        storage, rotation, and retrieval across AWS services and applications.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>IAM policy design & least privilege enforcement</li>
+                        <li><i class="fas fa-check"></i>Cross-account access & federation setup</li>
+                        <li><i class="fas fa-check"></i>Secrets Manager automation & rotation</li>
+                        <li><i class="fas fa-check"></i>AWS SSO & Identity Center configuration</li>
+                        <li><i class="fas fa-check"></i>Service Control Policies (SCP) management</li>
+                        <li><i class="fas fa-check"></i>CloudTrail & GuardDuty integration</li>
+                    </ul>
+                    <div class="tech-badge">AWS Certified</div>
+                </div>
+
+                <!-- CyberArk -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon cyberark"><i class="fas fa-user-lock"></i></div>
+                        <div>
+                            <h3 class="tech-title">CyberArk</h3>
+                            <div class="tech-category">Privileged Access Security</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Industry-leading PAM platform for credential vaulting, session isolation, 
+                        and privilege elevation. Complete PASM, PEDM, and CIEM capabilities 
+                        for comprehensive privileged access governance across the enterprise.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Privileged Account & Session Management (PASM)</li>
+                        <li><i class="fas fa-check"></i>Endpoint Privilege Manager (Windows/Unix/Mac)</li>
+                        <li><i class="fas fa-check"></i>Conjur Secrets Manager for DevOps</li>
+                        <li><i class="fas fa-check"></i>Cloud Infrastructure Entitlement Mgmt (CIEM)</li>
+                        <li><i class="fas fa-check"></i>Vendor Privileged Access Manager</li>
+                        <li><i class="fas fa-check"></i>CORA AI threat detection integration</li>
+                    </ul>
+                    <div class="tech-badge">Gartner Leader 2024</div>
+                </div>
+
+                <!-- SailPoint -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon sailpoint"><i class="fas fa-users-gear"></i></div>
+                        <div>
+                            <h3 class="tech-title">SailPoint IdentityIQ</h3>
+                            <div class="tech-category">Identity Governance & Administration</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Enterprise identity governance for access certification, lifecycle 
+                        management, and compliance automation. AI-driven access recommendations, 
+                        provisioning workflows, and comprehensive audit capabilities for regulatory compliance.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Identity Lifecycle Management (JML)</li>
+                        <li><i class="fas fa-check"></i>Access Certification campaigns & reviews</li>
+                        <li><i class="fas fa-check"></i>Role-based access modeling & mining</li>
+                        <li><i class="fas fa-check"></i>Separation of Duties (SoD) policy enforcement</li>
+                        <li><i class="fas fa-check"></i>AI-driven access recommendations</li>
+                        <li><i class="fas fa-check"></i>Multi-application provisioning connectors</li>
+                    </ul>
+                    <div class="tech-badge">IGA Market Leader</div>
+                </div>
+
+                <!-- Microsoft Intune -->
+                <div class="tech-card">
+                    <div class="tech-card-header">
+                        <div class="tech-icon intune"><i class="fas fa-mobile-alt"></i></div>
+                        <div>
+                            <h3 class="tech-title">Microsoft Intune</h3>
+                            <div class="tech-category">Unified Endpoint Management</div>
+                        </div>
+                    </div>
+                    <p class="tech-description">
+                        Cloud-based unified endpoint management for mobile devices, desktops, 
+                        and applications. Device compliance policies, app protection, and 
+                        seamless integration with Entra ID for comprehensive device security.
+                    </p>
+                    <ul class="tech-features">
+                        <li><i class="fas fa-check"></i>Device enrollment & compliance policies</li>
+                        <li><i class="fas fa-check"></i>Application management & protection</li>
+                        <li><i class="fas fa-check"></i>Conditional Access integration</li>
+                        <li><i class="fas fa-check"></i>Windows Autopilot deployment</li>
+                        <li><i class="fas fa-check">

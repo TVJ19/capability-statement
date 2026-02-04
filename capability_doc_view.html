@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KR3 Infosys - Capability Statement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@1,600&display=swap');
+
+        :root {
+            --bg: #080808;
+            --paper: #111111;
+            --text-main: #e2e2e2;
+            --text-muted: #888888;
+            --accent: #22d3ee; /* Cyan-400 */
+            --accent-dim: rgba(34, 211, 238, 0.1);
+            --gold: #d4af37;
+            --border: #333;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .document-container {
+            background-color: var(--paper);
+            width: 100%;
+            max-width: 900px;
+            padding: 80px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            border: 1px solid #222;
+            position: relative;
+        }
+
+        /* Subtle grid texture */
+        .document-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            border-bottom: 2px solid var(--text-main);
+            padding-bottom: 20px;
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+        
+        .brand span { color: var(--accent); }
+
+        .doc-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 48px;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        p {
+            color: #cccccc;
+            margin-bottom: 20px;
+            font-weight: 300;
+            font-size: 15px;
+        }
+
+        .lead {
+            font-size: 18px;
+            color: #e2e2e2;
+            font-weight: 300;
+            margin-bottom: 40px;
+            border-left: 2px solid var(--gold);
+            padding-left: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .tech-item {
+            margin-bottom: 25px;
+        }
+        
+        .tech-item h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tech-item p {
+            font-size: 14px;
+            color: #999;
+            margin: 0;
+        }
+
+        .server-box {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--accent);
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 80px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            font-size: 12px;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .document-container { 
+                background: white; 
+                box-shadow: none; 
+                border: none; 
+                padding: 0; 
+                max-width: 100%;
+            }
+            .document-container::before { display: none; }
+            h1, h3, .lead { color: black; }
+            p, .tech-item p { color: #444; }
+            header { border-bottom-color: black; }
+            .brand span { color: black; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-container">
+        <div class="content">
+            <header>
+                <div class="brand">KR3<span>INFOSYS</span></div>
+                <div class="doc-title">Capability Statement // 2026</div>
+            </header>
+
+            <h1>Architects of the Secure <br>Digital Core.</h1>
+            
+            <p class="lead">
+                We deliver mission-critical Identity & Access Management (IAM) operations for the Fortune 500. 
+                Combining elite engineering with automated resilience to secure the enterprise nervous system.
+            </p>
+
+            <h2>Core Competencies</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Identity & Access (IAM)</h3>
+                    <div class="tech-item">
+                        <h4>Microsoft Entra ID</h4>
+                        <p>Enterprise-scale architecture, conditional access policies, and hybrid identity synchronization.</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>StrongDM (Legacy)</h4>
+                        <p>Specialized operational sustainment for legacy infrastructure access, ensuring zero-disruption bridging.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Privileged Access (PAM)</h3>
+                    <div class="tech-item">
+                        <h4>CyberArk & Akeyless</h4>
+                        <p>Dual-stack mastery. Vaulting, session management, and rotational secret enforcement.</p>
+                    </div>
+                    <div class="tech-item">
+                        <h4>GCP & Azure Secrets</h4>
+                        <p>Native cloud secret management integrated directly into CI/CD pipelines.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3>Governance (IGA)</h3>
+                <div class="tech-item">
+                    <h4>SailPoint IdentityNow</h4>
+                    <p>End-to-end deployment and operations. Automated lifecycle management, certification campaigns, and compliance reporting.</p>
+                </div>
+            </div>
+
+            <h2>The Automation Engine</h2>
+            <p>
+                We differentiate through <strong>"Operations as Code"</strong>. Our support model is not manual—it is engineered.
+                We deploy bespoke Python/Shell strategies encapsulated in containerized environments.
+            </p>
+
+            <div class="server-box">
+                > initiating_podman_fleet...<br>
+                > loading_module: auto_remediation.py<br>
+                > target: [sailpoint, entra_id, cyberark]<br>
+                > status: AUTOMATED_DRIFT_CORRECTION_ACTIVE
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="tech-item">
+                    <h4>Containerized Ops (Podman/Docker)</h4>
+                    <p>Portable, immutable tooling environments that ensure consistent execution across any infrastructure node.</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Polyglot Scripting</h4>
+                    <p>Advanced automation utilizing Python and Bash to interface directly with API endpoints for bulk actions.</p>
+                </div>
+            </div>
+
+            <h2>Past Performance</h2>
+            <p>
+                <strong>Confidential Fortune 500 Client</strong><br>
+                End-to-end operational takeover of a global IAM landscape. Successfully integrated SailPoint governance while maintaining legacy StrongDM access paths and modernizing Privileged Access via Akeyless.
+            </p>
+
+            <div class="footer">
+                <div>KR3 Infosys // Identity Security Specialists</div>
+                <div>www.kr3infosys.com</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
