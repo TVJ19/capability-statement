@@ -505,22 +505,86 @@ const TechStackGrid = () => {
     {
       name: "Sovereignty & Cloud",
       color: "var(--accent-cyan)",
-      techs: ["AWS", "Azure", "Google Cloud", "Kubernetes"]
+      techs: [
+        {
+          id: "aws", name: "AWS", role: "Primary Substrate",
+          desc: "The backbone of our sovereign execution environment. We leverage AWS Nitro Enclaves for confidential computing and Lambda for event-driven identity orchestration.",
+          specs: "EKS / Lambda / Nitro"
+        },
+        {
+          id: "azure", name: "Azure", role: "Hybrid Control",
+          desc: "Seamlessly integrated for Entra ID synchronization. Our architecture treats Azure as a native extension of the on-premise trust boundary.",
+          specs: "Arc / Entra ID / Sentinel"
+        },
+        {
+          id: "gcp", name: "Google Cloud", role: "Data Analytics",
+          desc: "Powering our identity analytics and AI modeling. BigQuery ingests millions of access logs to train our predictive governance models.",
+          specs: "BigQuery / Vertex AI"
+        },
+        {
+          id: "k8s", name: "Kubernetes", role: "Orchestration",
+          desc: "The universal runtime. Our entire identity fabric involves microservices deployed across multi-cloud K8s clusters for immutable infrastructure.",
+          specs: "v1.29 / Helm / Istio"
+        }
+      ]
     },
     {
       name: "Privileged Defense",
       color: "var(--accent-alert)",
-      techs: ["StrongDM", "CyberArk", "Akeyless"]
+      techs: [
+        {
+          id: "sdm", name: "StrongDM", role: "Access Plane",
+          desc: "The protocol-aware proxy that eliminates VPNs. We use StrongDM to grant ephemeral, just-in-time access to databases and servers without static keys.",
+          specs: "Zero Trust / JIT / Audit"
+        },
+        {
+          id: "cyberark", name: "CyberArk", role: "Vault Core",
+          desc: "The unbreakable vault. CyberArk secures the 'Keys to the Kingdom', rotating root passwords and API tokens automatically every 60 minutes.",
+          specs: "CPM / PSM / Conjur"
+        },
+        {
+          id: "akeyless", name: "Akeyless", role: "Secrets Mgmt",
+          desc: "Distributed Fragments Technology (DFC). Akeyless ensures that no single cloud provider ever holds the complete encryption key for our secrets.",
+          specs: "DFC / K8s Injection"
+        }
+      ]
     },
     {
       name: "Governance Brain",
       color: "var(--accent-purple)",
-      techs: ["SailPoint", "Saviynt"]
+      techs: [
+        {
+          id: "sailpoint", name: "SailPoint", role: "Identity GRC",
+          desc: "The legislative branch of our architecture. SailPoint defines 'Who Should Have Access' and uses AI to detect anomalies in real-time.",
+          specs: "IdentityNow / AI / FAM"
+        },
+        {
+          id: "saviynt", name: "Saviynt", role: "Cloud IGA",
+          desc: "Granular entitlements management. Saviynt peers deep into SAP and Oracle environments to ensure SoD (Separation of Duties) compliance.",
+          specs: "EIC / CPAM / SoD"
+        }
+      ]
     },
     {
       name: "Identity Fabric",
       color: "#ec4899",
-      techs: ["Microsoft Entra", "Ping Identity", "Okta"]
+      techs: [
+        {
+          id: "entra", name: "Microsoft Entra", role: "Auth Source",
+          desc: "The primary Identity Provider (IdP). Entra ID handles high-volume authentication with Conditional Access policies that assess risk in 100ms.",
+          specs: "P2 / Conditional Access"
+        },
+        {
+          id: "ping", name: "Ping Identity", role: "Federation",
+          desc: "The legacy bridge. PingFederate connects modern OIDC apps with legacy SAML/Header-based systems, ensuring no application is left behind.",
+          specs: "PingFed / DaVinci"
+        },
+        {
+          id: "okta", name: "Okta", role: "Customer IAM",
+          desc: "Frictionless B2C access. Okta powers our external portals, providing passwordless login experiences for partners and customers.",
+          specs: "CIAM / Workflows"
+        }
+      ]
     }
   ];
 
@@ -536,62 +600,60 @@ const TechStackGrid = () => {
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 10rem' }}>
       <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '5rem' }}>Strategic Ecosystem.</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6rem' }}>
         {ecosystems.map((eco, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: isMobile ? 0 : (i % 2 === 0 ? -50 : 50) }} // Simplified anim for mobile
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            style={{
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : (i % 2 === 0 ? 'row' : 'row-reverse'),
-              alignItems: isMobile ? 'flex-start' : 'center',
-              gap: isMobile ? '2rem' : '4rem'
-            }}
-          >
-            {/* LABEL */}
-            <div style={{ flex: 1, textAlign: isMobile ? 'left' : (i % 2 === 0 ? 'right' : 'left'), width: '100%' }}>
-              <div className="mono" style={{ color: eco.color, fontSize: '1.2rem', marginBottom: '0.5rem' }}>/// {eco.name}</div>
-              <div style={{ height: '1px', width: '100%', background: `linear-gradient(to ${isMobile || i % 2 !== 0 ? 'right' : 'left'}, ${eco.color}, transparent)` }} />
+          <div key={i}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '3rem' }}>
+              <div className="mono" style={{ color: eco.color, fontSize: '1.2rem', whiteSpace: 'nowrap' }}>/// {eco.name}</div>
+              <div style={{ height: '1px', width: '100%', background: `linear-gradient(to right, ${eco.color}, transparent)` }} />
             </div>
 
-            {/* NODES 3D */}
             <div style={{
-              flex: 2,
-              display: 'flex',
-              flexWrap: 'wrap', // Allow wrapping on small screens
-              gap: isMobile ? '1rem' : '2rem',
-              justifyContent: isMobile ? 'flex-start' : (i % 2 === 0 ? 'flex-start' : 'flex-end'),
-              perspective: '1000px',
-              width: '100%'
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '2rem'
             }}>
               {eco.techs.map((t, j) => (
                 <motion.div
                   key={j}
-                  className="jewel-node"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: j * 0.1, duration: 0.5, ease: "easeOut" }}
+                  className="glass-card"
                   style={{
-                    '--glow-color': eco.color,
-                    padding: '1.5rem',
-                    borderRadius: '16px',
+                    padding: '2rem',
+                    borderTop: `2px solid ${eco.color}`,
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '1rem',
-                    minWidth: isMobile ? '100px' : '120px', // Smaller on mobile
-                    cursor: 'pointer'
+                    justifyContent: 'space-between',
+                    minHeight: '280px' // Ensure uniform height for neat grid
                   }}
-                  whileHover={{ rotateX: 10, rotateY: 10 }}
+                  whileHover={{ y: -5, boxShadow: `0 10px 30px -10px ${eco.color}40` }}
                 >
-                  <div style={{ filter: `drop-shadow(0 0 10px ${eco.color}60)` }}>
-                    <BrandLogo brand={t} size={isMobile ? 32 : 40} color={['AWS', 'Azure', 'Google Cloud', 'Kubernetes'].includes(t) ? undefined : "var(--text-primary)"} />
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                      <BrandLogo brand={t.name} size={40} color={['AWS', 'Azure', 'Google Cloud', 'Kubernetes'].includes(t.name) ? undefined : "var(--text-primary)"} />
+                      <div className="mono" style={{ fontSize: '0.7rem', color: eco.color, border: `1px solid ${eco.color}`, padding: '4px 8px', borderRadius: '4px' }}>
+                        {t.role}
+                      </div>
+                    </div>
+
+                    <h4 style={{ fontSize: '1.4rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>{t.name}</h4>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
+                      {t.desc}
+                    </p>
                   </div>
-                  <span className="mono" style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: 'var(--text-secondary)' }}>{t}</span>
+
+                  <div style={{ paddingTop: '1rem', borderTop: '1px solid rgba(15,23,42,0.05)' }}>
+                    <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
+                      <span style={{ color: eco.color }}>spec:</span> {t.specs}
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
