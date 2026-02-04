@@ -3,36 +3,40 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* --- KR3 HYBRID PALETTE (Elevated) --- */
-  /* Background: Not stark white. A premium "Pearl" tint. */
-  --bg-primary: #F4F7FA;
-  /* Light Blue-Grey Tint (Executive feel) */
-  --bg-secondary: #FFFFFF;
-  /* Pure white for cards */
-  --bg-glass: rgba(255, 255, 255, 0.65);
+  /* --- PROJECT VOID: CYBER-SECURITY PALETTE (Dark Mode) --- */
+  /* Background: Void Navy (Deepest Slate) */
+  --bg-primary: #020617;
+  /* Slate-950 */
+  --bg-secondary: #0f172a;
+  /* Slate-900 */
+  --bg-glass: rgba(2, 6, 23, 0.7);
+  /* Dark Glass */
 
-  /* Text: KR3 Brand Alignment */
-  --text-primary: #0B1D36;
-  /* KR3 Deep Navy (Instead of generic Slate) */
-  --text-secondary: #334155;
-  /* Slate-700 (High readability) */
-  --text-tertiary: #64748B;
-  /* Slate-500 */
+  /* Text: High Contrast Terminal Style */
+  --text-primary: #F8FAFC;
+  /* Slate-50 */
+  --text-secondary: #94A3B8;
+  /* Slate-400 */
+  --text-tertiary: #475569;
+  /* Slate-600 */
 
-  /* Accents (KR3 Neon/Brights adapted for Light Mode) */
-  --accent-cyan: #0088CC;
-  /* KR3 Cyan - Deepened for contrast */
-  --accent-purple: #6D28D9;
-  /* Royal Violet */
-  --accent-alert: #DC2626;
-  /* Crimson */
-  --accent-green: #059669;
-  /* Emerald */
+  /* Accents: Neon/Cyber (High Luminosity) */
+  --accent-cyan: #22D3EE;
+  /* Cyan-400 (Neon) */
+  --accent-purple: #A78BFA;
+  /* Violet-400 */
+  --accent-alert: #F87171;
+  /* Red-400 */
+  --accent-green: #34D399;
+  /* Emerald-400 */
+
+  /* SCANLINE OVERLAY */
+  --scanline-color: rgba(0, 0, 0, 0.5);
 
   /* Ambient Gradients (Subtle Brand Echo) */
   --gradient-ambient: radial-gradient(circle at 50% 50%, rgba(0, 136, 204, 0.08) 0%, transparent 60%);
 
-  color-scheme: light;
+  color-scheme: dark;
   color: var(--text-primary);
   background-color: var(--bg-primary);
 
@@ -57,25 +61,28 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: 'Space Grotesk', sans-serif;
+  /* Tech Headings */
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--text-primary);
 }
 
 .hero-text {
   font-size: clamp(3rem, 10vw, 8rem);
-  /* KR3 Navy Gradient */
-  background: linear-gradient(135deg, #0B1D36 0%, #1E3A8A 100%);
+  /* Cyber Gradient: Cyan to Purple */
+  background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 800;
   letter-spacing: -0.04em;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+  filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.15));
 }
 
 .section-title {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   margin-bottom: 3rem;
   letter-spacing: -0.04em;
@@ -92,12 +99,12 @@ h6 {
 }
 
 .mono {
-  font-family: 'Space Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
+  /* Terminal Font */
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  opacity: 0.9;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 /* --- LAYOUT UTILS --- */

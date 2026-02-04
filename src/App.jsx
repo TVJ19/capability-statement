@@ -42,9 +42,9 @@ const TacticalGrid = () => {
       {/* 1. Base Grid (Static) */}
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(circle, rgba(11,29,54,0.08) 1px, transparent 1px)',
-        backgroundSize: '30px 30px',
-        opacity: 0.6
+        backgroundImage: 'radial-gradient(circle, rgba(34, 211, 238, 0.1) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+        opacity: 0.4
       }} />
 
       {/* 2. Tactical Crosshairs (Corners) */}
@@ -128,9 +128,9 @@ const StatsGrid = () => {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ delay: i * 0.05, type: "tween", ease: "easeOut", duration: 0.5 }}
           className="glass-card shimmer-border"
-          style={{ textAlign: 'center', padding: '2rem' }}
+          style={{ textAlign: 'center', padding: '2rem', background: 'rgba(2, 6, 23, 0.6)', border: '1px solid rgba(34, 211, 238, 0.2)', boxShadow: '0 0 20px rgba(34, 211, 238, 0.05)' }}
         >
-          <div className="hero-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '0.5rem' }}>{stat.value}</div>
+          <div className="hero-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '0.5rem', textShadow: '0 0 20px rgba(34, 211, 238, 0.3)' }}>{stat.value}</div>
           <div className="mono" style={{ color: 'var(--text-tertiary)', fontSize: '0.9rem' }}>{stat.label}</div>
         </motion.div>
       ))}
@@ -159,8 +159,9 @@ const SwissHub = ({ phase }) => {
           width: '180px',
           height: '180px',
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.95)',
-          border: '1px solid rgba(11,29,54,0.1)',
+          background: 'rgba(2,6,23, 0.8)', // Dark Void
+          border: '1px solid rgba(34, 211, 238, 0.3)', // Cyan Border
+          boxShadow: '0 0 40px rgba(34, 211, 238, 0.1)', // Internal Glow
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -198,7 +199,7 @@ const SwissHub = ({ phase }) => {
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-        style={{ position: 'absolute', inset: '5%', borderRadius: '50%', border: '1px solid rgba(11,29,54,0.05)', borderLeftColor: 'var(--accent-cyan)' }}
+        style={{ position: 'absolute', inset: '5%', borderRadius: '50%', border: '1px solid rgba(34, 211, 238, 0.1)', borderLeftColor: 'var(--accent-cyan)' }}
       />
 
       {/* 3. ACTIVE DATA BEAMS (SVG Flow) */}
@@ -323,44 +324,48 @@ const DossierCard = ({ layer, title, subtitle, logoPath, color, strategicValue, 
         <div
           style={{
             padding: '3rem',
-            borderLeft: `1px solid ${color}`,
-            background: 'rgba(255,255,255,0.9)',
-            boxShadow: '0 20px 50px -20px rgba(0,0,0,0.1)',
+            borderLeft: `2px solid ${color}`,
+            borderTop: `1px solid ${color}40`, // Tech Bracket top
+            background: 'rgba(15, 23, 42, 0.6)', // Dark Glass
+            boxShadow: `0 0 30px -10px ${color}20`, // Colored Glow
             transformStyle: 'preserve-3d',
             overflow: 'hidden',
             position: 'relative'
           }}
         >
           {/* SCANNING BORDER GRADIENT */}
-          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: `linear-gradient(to bottom, transparent, ${color}, transparent)`, zIndex: 10 }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: `linear-gradient(to bottom, transparent, ${color}, transparent)`, zIndex: 10, opacity: 0.8 }} />
+
+          {/* HUD CORNER BRACKET (Bottom Right) */}
+          <div style={{ position: 'absolute', bottom: '0', right: '0', width: '20px', height: '20px', borderBottom: `2px solid ${color}`, borderRight: `2px solid ${color}`, opacity: 0.5 }} />
 
           {/* HEADER */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid rgba(15,23,42,0.05)', paddingBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1.5rem' }}>
             <div>
               <div className="mono" style={{ fontSize: '0.75rem', color: color, marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
                 <ScrambleText text={layer} />
               </div>
-              <h4 style={{ fontFamily: 'Times New Roman, serif', fontWeight: 700, fontSize: '2rem', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+              <h4 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '2rem', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em', textShadow: `0 0 20px ${color}40` }}>
                 {title}
               </h4>
               <div className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>{subtitle}</div>
             </div>
             {/* Trust Anchor */}
-            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />}
+            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1) opacity(0.8)' }} />}
           </div>
 
-          {/* STRATEGIC VALUE (Bold Serif) */}
+          {/* STRATEGIC VALUE (Bold) */}
           <div style={{ marginBottom: '2rem' }}>
-            <p style={{ fontFamily: 'Times New Roman, serif', fontSize: '1.35rem', lineHeight: 1.4, color: 'var(--text-primary)', fontStyle: 'italic' }}>
-              "{strategicValue}"
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.25rem', lineHeight: 1.5, color: 'var(--text-primary)', fontWeight: 400 }}>
+              <span style={{ color: color, marginRight: '0.5rem' }}>//</span> "{strategicValue}"
             </p>
           </div>
 
           {/* TECHNICAL SPECS (Sans) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(15,23,42,0.05)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             {features && features.map((f, i) => (
               <div key={i}>
-                <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.2rem', textTransform: 'uppercase' }}>{f.label}</strong>
+                <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.2rem', textTransform: 'uppercase', fontFamily: 'JetBrains Mono' }}>{f.label}</strong>
                 <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{f.value}</span>
               </div>
             ))}
@@ -406,20 +411,20 @@ const CapabilityCard = ({ icon: Icon, title, desc, features, strategicValue, del
 
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
-          <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'rgba(15,23,42,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(15,23,42,0.1)' }}>
+          <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'rgba(34, 211, 238, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(34, 211, 238, 0.2)', boxShadow: '0 0 15px rgba(34, 211, 238, 0.1)' }}>
             <Icon size={30} color="var(--accent-cyan)" />
           </div>
-          <div className="mono" style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', padding: '4px 8px', borderRadius: '20px' }}>
+          <div className="mono" style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', padding: '4px 8px', borderRadius: '4px', background: 'rgba(34, 211, 238, 0.05)' }}>
             LEVEL 5 MATURITY
           </div>
         </div>
 
-        <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{title}</h3>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6, fontSize: '1.05rem' }}>{desc}</p>
+        <h3 style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-primary)', letterSpacing: '-0.02em', textShadow: '0 0 10px rgba(255,255,255,0.1)' }}>{title}</h3>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6, fontSize: '1.05rem', fontWeight: 300 }}>{desc}</p>
 
-        <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(15,23,42,0.03)', borderRadius: '12px', borderLeft: '3px solid var(--accent-cyan)' }}>
+        <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(2, 6, 23, 0.5)', borderRadius: '12px', borderLeft: '3px solid var(--accent-cyan)', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.3rem' }}>STRATEGIC VALUE</div>
-          <div style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{strategicValue}</div>
+          <div style={{ color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'Inter, sans-serif' }}>{strategicValue}</div>
         </div>
 
         <ul className="mono" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', listStyle: 'none', padding: 0 }}>
@@ -624,6 +629,8 @@ const TechStackGrid = () => {
                   style={{
                     padding: '2rem',
                     borderTop: `2px solid ${eco.color}`,
+                    background: 'rgba(15, 23, 42, 0.4)',
+                    border: '1px solid rgba(255,255,255,0.05)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
