@@ -10,8 +10,9 @@ const CustomCursor = () => {
     const mouseY = useMotionValue(0);
 
     // Smooth spring physics for the ring (Trailing effect)
-    const ringX = useSpring(mouseX, { stiffness: 200, damping: 20 });
-    const ringY = useSpring(mouseY, { stiffness: 200, damping: 20 });
+    // Snappier settings: Higher stiffness (400), Higher damping (30) to prevent wobble
+    const ringX = useSpring(mouseX, { stiffness: 400, damping: 30 });
+    const ringY = useSpring(mouseY, { stiffness: 400, damping: 30 });
 
     useEffect(() => {
         const updateMousePosition = (e) => {

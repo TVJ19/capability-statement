@@ -104,9 +104,17 @@ const AuroraPlane = () => {
 };
 
 const AuroraBackground = () => {
+    const [dpr, setDpr] = React.useState(1);
+
+    React.useEffect(() => {
+        // Performance: Cap dpr at 1.0 globally to ensure 60fps on MacBook Air/Laptops
+        // Retina (dpr=2) is causing 20fps drops.
+        setDpr(1);
+    }, []);
+
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -2 }}>
-            <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 2]}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>
+            <Canvas dpr={dpr} style={{ width: '100%', height: '100%' }}>
                 <AuroraPlane />
             </Canvas>
         </div>

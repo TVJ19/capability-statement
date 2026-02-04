@@ -126,7 +126,7 @@ const StatsGrid = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ delay: i * 0.1, type: "tween", ease: "easeOut", duration: 0.8 }}
+          transition={{ delay: i * 0.05, type: "tween", ease: "easeOut", duration: 0.5 }}
           className="glass-card shimmer-border"
           style={{ textAlign: 'center', padding: '2rem' }}
         >
@@ -543,7 +543,7 @@ const TechStackGrid = () => {
             initial={{ opacity: 0, x: isMobile ? 0 : (i % 2 === 0 ? -50 : 50) }} // Simplified anim for mobile
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             style={{
               display: 'flex',
               flexDirection: isMobile ? 'column' : (i % 2 === 0 ? 'row' : 'row-reverse'),
