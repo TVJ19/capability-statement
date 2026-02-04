@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0B1D36;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="15" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background: Elegant Rounded Square (iOS Style) -->
+  <rect x="0" y="0" width="512" height="512" rx="120" fill="url(#grad1)" />
+  
+  <!-- Logo Mark: The "KR3" Neural Node -->
+  <!-- A central strong vertical with branching connectivity, abstracting a 'K' -->
+  <g transform="translate(136, 136) scale(0.9)" fill="none" stroke="#0088CC" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main Spine -->
+    <path d="M80 0 V240" stroke="#FFFFFF" stroke-opacity="0.9" />
+    
+    <!-- Branch Top (K arm) -->
+    <path d="M80 120 L200 0" stroke="#0088CC" filter="url(#glow)" />
+    
+    <!-- Branch Bottom (K leg) -->
+    <path d="M80 120 L200 240" stroke="#0088CC" filter="url(#glow)" />
+    
+    <!-- Connection Dot -->
+    <circle cx="80" cy="120" r="20" fill="#FFFFFF" stroke="none" />
+  </g>
+</svg>

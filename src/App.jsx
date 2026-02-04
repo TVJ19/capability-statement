@@ -4,16 +4,77 @@ import Lenis from 'lenis';
 import AuroraBackground from './components/AuroraBackground';
 import CustomCursor from './components/CustomCursor';
 import BrandLogo from './components/BrandLogo';
-import { motion, useScroll, useTransform, useSpring, useTime, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useTime, useInView, useMotionValue } from 'framer-motion';
 import {
   Shield, Key, Network, Cpu, Lock, Terminal, Globe,
   Smartphone, Database, Server, Layers, Command, Zap, Cloud, CloudLightning,
   Workflow, Check, AlertTriangle, Play, ChevronDown, Rocket, Users, Activity,
-  Briefcase, FileText, LayoutGrid, Search, Smartphone as Phone, RefreshCw
+  Briefcase, FileText, LayoutGrid, Search, Smartphone as Phone, RefreshCw,
+  Scan
 } from 'lucide-react';
 import './index.css';
 
 // --- VISUAL COMPONENTS ---
+
+const TacticalGrid = () => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleMouseMove = (e) => {
+      // Performance: Only update if not mobile to save resources
+      if (window.innerWidth >= 768) {
+        setMousePos({ x: e.clientX, y: e.clientY });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {/* 1. Base Grid (Static) */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'radial-gradient(circle, rgba(11,29,54,0.08) 1px, transparent 1px)',
+        backgroundSize: '30px 30px',
+        opacity: 0.6
+      }} />
+
+      {/* 2. Tactical Crosshairs (Corners) */}
+      {/* Hidden on mobile to reduce visual noise */}
+      {!isMobile && (
+        <>
+          <div style={{ position: 'absolute', top: '2rem', left: '2rem', width: '20px', height: '20px', borderTop: '1px solid rgba(11,29,54,0.3)', borderLeft: '1px solid rgba(11,29,54,0.3)' }} />
+          <div style={{ position: 'absolute', top: '2rem', right: '2rem', width: '20px', height: '20px', borderTop: '1px solid rgba(11,29,54,0.3)', borderRight: '1px solid rgba(11,29,54,0.3)' }} />
+          <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', width: '20px', height: '20px', borderBottom: '1px solid rgba(11,29,54,0.3)', borderLeft: '1px solid rgba(11,29,54,0.3)' }} />
+          <div style={{ position: 'absolute', bottom: '2rem', right: '2rem', width: '20px', height: '20px', borderBottom: '1px solid rgba(11,29,54,0.3)', borderRight: '1px solid rgba(11,29,54,0.3)' }} />
+        </>
+      )}
+
+      {/* 3. Parallax Noise Overlay (Subtle) - DISABLED ON MOBILE */}
+      {!isMobile && (
+        <motion.div
+          animate={{ x: -mousePos.x / 50, y: -mousePos.y / 50 }}
+          transition={{ type: "tween", ease: "linear", duration: 0 }}
+          style={{
+            position: 'absolute', inset: '-10%', width: '120%', height: '120%',
+            backgroundImage: 'linear-gradient(45deg, rgba(8,145,178,0.03) 25%, transparent 25%, transparent 50%, rgba(8,145,178,0.03) 50%, rgba(8,145,178,0.03) 75%, transparent 75%, transparent)',
+            backgroundSize: '40px 40px',
+            opacity: 0.5,
+            willChange: 'transform' // Performance optimization
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
 const VectorGlobe = () => {
   const time = useTime();
@@ -69,7 +130,7 @@ const StatsGrid = () => {
           className="glass-card shimmer-border"
           style={{ textAlign: 'center', padding: '2rem' }}
         >
-          <div className="hero-text" style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>{stat.value}</div>
+          <div className="hero-text" style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '0.5rem' }}>{stat.value}</div>
           <div className="mono" style={{ color: 'var(--text-tertiary)', fontSize: '0.9rem' }}>{stat.label}</div>
         </motion.div>
       ))}
@@ -77,68 +138,104 @@ const StatsGrid = () => {
   );
 };
 
-const AnimatedArchitecture = () => {
-  const time = useTime();
-  // Kinetic Class: Floating Physics (Sine Waves) instead of simple rotation
-  const y1 = useTransform(time, [0, 4000], [-10, 10], { clamp: false });
-  const y2 = useTransform(time, [0, 6000], [10, -10], { clamp: false });
-  const rotateSlow = useTransform(time, [0, 120000], [0, 360], { clamp: false }); // Super slow 2min rotation
-
+const SwissHub = ({ phase }) => {
   return (
-    <div style={{ position: 'relative', width: '500px', height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ position: 'relative', width: '100%', maxWidth: '500px', aspectRatio: '1/1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-      {/* 1. CENTRAL HUB (The Core) */}
+      {/* 1. THE REACTIVE CORE */}
       <motion.div
-        animate={{ scale: [1, 1.05, 1] }}
+        animate={{
+          scale: [1, 1.02, 1],
+          boxShadow: [
+            '0 0 20px rgba(6,182,212,0.1)',
+            '0 0 50px rgba(6,182,212,0.3)',
+            '0 0 20px rgba(6,182,212,0.1)'
+          ]
+        }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        style={{ zIndex: 10, background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', borderRadius: '50%', padding: '2rem', border: '1px solid rgba(15,23,42,0.1)', boxShadow: '0 20px 50px rgba(124,58,237,0.1)' }}
+        style={{
+          position: 'relative',
+          zIndex: 20,
+          width: '180px',
+          height: '180px',
+          borderRadius: '50%',
+          background: 'rgba(255,255,255,0.95)',
+          border: '1px solid rgba(11,29,54,0.1)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '1.5rem',
+          backdropFilter: 'blur(10px)'
+        }}
       >
-        <BrandLogo brand="CyberArk" size={64} color="var(--text-primary)" />
+        <div className="mono" style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', marginBottom: '0.5rem', letterSpacing: '0.1em' }}>UNIFIED CORE</div>
+
+        {/* Trust Anchors (Authentic PNGs) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <img src="/logos/StrongDM.png" alt="StrongDM" style={{ height: '32px', width: 'auto' }} />
+          <div style={{ width: '1px', height: '20px', background: 'rgba(11,29,54,0.2)' }} />
+          <img src="/logos/Akeyless.png" alt="Akeyless" style={{ height: '28px', width: 'auto' }} />
+        </div>
+
+        {/* Core Status */}
+        <div style={{ marginTop: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <motion.div
+            animate={{ opacity: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }}
+          />
+          <span className="mono" style={{ fontSize: '0.55rem', color: '#10b981' }}>SYSTEM ACTIVE</span>
+        </div>
       </motion.div>
 
-      {/* 2. ORBIT TRACKS (Subtle) */}
-      <div style={{ position: 'absolute', inset: '10%', borderRadius: '50%', border: '1px solid rgba(15,23,42,0.05)' }} />
-      <div style={{ position: 'absolute', inset: '25%', borderRadius: '50%', border: '1px solid rgba(15,23,42,0.08)' }} />
+      {/* 2. ROTATING CONTAINMENT RINGS */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        style={{ position: 'absolute', inset: '12%', borderRadius: '50%', border: '1px dashed rgba(6,182,212,0.2)' }}
+      />
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+        style={{ position: 'absolute', inset: '5%', borderRadius: '50%', border: '1px solid rgba(11,29,54,0.05)', borderLeftColor: 'var(--accent-cyan)' }}
+      />
 
-      {/* 3. CONSTELLATION NODES (Floating Satellites) */}
-      <motion.div style={{ position: 'absolute', inset: 0, rotate: rotateSlow }}>
+      {/* 3. ACTIVE DATA BEAMS (SVG Flow) */}
+      <svg style={{ position: 'absolute', inset: '-50%', width: '200%', height: '200%', pointerEvents: 'none', zIndex: 10 }}>
+        {/* Beam 1: Governance (Top Right) */}
+        <motion.path
+          d="M 50% 50% L 90% 20%"
+          stroke="var(--accent-purple)"
+          strokeWidth="1"
+          strokeDasharray="5,5"
+          animate={{ opacity: phase === 0 ? 1 : 0.1, strokeDashoffset: [0, -20] }}
+          transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+          fill="none"
+        />
 
-        {/* Node 1: Akeyless (Top) */}
-        <motion.div style={{ position: 'absolute', top: '10%', left: '50%', x: '-50%', y: y1 }}>
-          <div style={{ background: '#fff', padding: '1rem', borderRadius: '50%', border: '1px solid var(--accent-alert)', boxShadow: '0 4px 15px rgba(239,68,68,0.1)' }}>
-            <BrandLogo brand="Akeyless" size={32} color="var(--accent-alert)" />
-          </div>
-          {/* Connection Line */}
-          <div style={{ position: 'absolute', top: '100%', left: '50%', width: '1px', height: '100px', background: 'linear-gradient(to bottom, var(--accent-alert), transparent)', opacity: 0.3 }} />
-        </motion.div>
+        {/* Beam 2: PAM (Right) */}
+        <motion.path
+          d="M 50% 50% L 90% 50%"
+          stroke="var(--accent-alert)"
+          strokeWidth="1"
+          strokeDasharray="5,5"
+          animate={{ opacity: phase === 1 ? 1 : 0.1, strokeDashoffset: [0, -20] }}
+          transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+          fill="none"
+        />
 
-        {/* Node 2: StrongDM (Right Bottom) */}
-        <motion.div style={{ position: 'absolute', bottom: '20%', right: '15%', y: y2 }}>
-          <div style={{ background: '#fff', padding: '1rem', borderRadius: '50%', border: '1px solid #34d399', boxShadow: '0 4px 15px rgba(52,211,153,0.1)' }}>
-            <BrandLogo brand="StrongDM" size={32} color="#34d399" />
-          </div>
-        </motion.div>
-
-        {/* Node 3: SailPoint (Left Bottom) */}
-        <motion.div style={{ position: 'absolute', bottom: '20%', left: '15%', y: y1 }}>
-          <div style={{ background: '#fff', padding: '1rem', borderRadius: '50%', border: '1px solid var(--accent-purple)', boxShadow: '0 4px 15px rgba(139,92,246,0.1)' }}>
-            <BrandLogo brand="SailPoint" size={32} color="var(--accent-purple)" />
-          </div>
-        </motion.div>
-
-        {/* Node 4: Cloud Giants (Orbiting outer) */}
-        <motion.div style={{ position: 'absolute', top: '50%', left: '0%', x: '-50%' }}>
-          <BrandLogo brand="AWS" size={24} color="#64748b" />
-        </motion.div>
-        <motion.div style={{ position: 'absolute', top: '50%', right: '0%', x: '50%' }}>
-          <BrandLogo brand="Azure" size={24} color="#0078D4" />
-        </motion.div>
-
-      </motion.div>
-
-      <div className="mono" style={{ position: 'absolute', bottom: '-4rem', color: 'var(--text-tertiary)', fontSize: '0.8rem', letterSpacing: '0.2em' }}>
-        UNIFIED IDENTITY FABRIC
-      </div>
+        {/* Beam 3: Federation (Bottom Right) */}
+        <motion.path
+          d="M 50% 50% L 90% 80%"
+          stroke="#ec4899"
+          strokeWidth="1"
+          strokeDasharray="5,5"
+          animate={{ opacity: phase === 2 ? 1 : 0.1, strokeDashoffset: [0, -20] }}
+          transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+          fill="none"
+        />
+      </svg>
     </div>
   );
 };
@@ -158,59 +255,126 @@ const Typewriter = ({ text, active }) => {
   return <span>{display}</span>;
 }
 
-// GrainOverlay removed for performance stability
-// const GrainOverlay = () => ...
+const ScrambleText = ({ text }) => {
+  const [display, setDisplay] = useState(text);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
 
-const PitchCard = ({ title, subtitle, icon: Icon, color, strategicValue, children }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    let iterations = 0;
+    const interval = setInterval(() => {
+      setDisplay(
+        text.split("")
+          .map((char, index) => {
+            if (index < iterations) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("")
+      );
+      if (iterations >= text.length) clearInterval(interval);
+      iterations += 1 / 3;
+    }, 30);
+    return () => clearInterval(interval);
+  }, [text]);
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
+  return <span>{display}</span>;
+}
+
+const DossierCard = ({ layer, title, subtitle, logoPath, color, strategicValue, features, children }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [-100, 100], [5, -5]);
+  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      whileHover={{ y: -5 }}
-      transition={{ type: "tween", ease: "easeOut", duration: 0.8 }}
-      className="glass-card spotlight-card"
-      onMouseMove={handleMouseMove}
-      style={{
-        '--mouse-x': `${mousePosition.x}px`,
-        '--mouse-y': `${mousePosition.y}px`,
-        padding: '2.5rem',
-        marginBottom: '2rem',
-        borderLeft: `4px solid ${color}`
-      }}
-    >
-      <div className="spotlight-overlay" />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-        <div style={{ padding: '12px', background: `${color}15`, borderRadius: '12px' }}>
-          <Icon size={32} color={color} />
-        </div>
-        <div>
-          <h4 style={{ fontSize: '1.5rem', margin: 0, lineHeight: 1, color: 'var(--text-primary)' }}>{title}</h4>
-          <div className="mono" style={{ fontSize: '0.8rem', color: color, marginTop: '4px' }}>{subtitle}</div>
-        </div>
-      </div>
+    // LAYOUT CONTAINER + PERSPECTIVE
+    <div style={{ position: 'relative', marginBottom: '4rem', perspective: '1000px' }}>
 
-      {strategicValue && (
-        <div style={{ marginBottom: '1.5rem', padding: '0.8rem', background: 'rgba(15,23,42,0.03)', borderRadius: '8px', border: `1px solid ${color}30` }}>
-          <span className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginRight: '0.5rem' }}>STRATEGIC VALUE:</span>
-          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{strategicValue}</span>
-        </div>
-      )}
+      {/* 1. COLLIDER OVERLAY (The "Hit Box")
+          - Static 2D plane (no transform)
+          - Transparent but captures all mouse events
+          - Z-Index 50 ensures it stays on top of the tilting card
+      */}
+      <div
+        style={{ position: 'absolute', inset: 0, zIndex: 50, cursor: 'default' }}
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          x.set(e.clientX - rect.left - rect.width / 2);
+          y.set(e.clientY - rect.top - rect.height / 2);
+        }}
+        onMouseLeave={() => {
+          x.set(0);
+          y.set(0);
+        }}
+      />
 
-      <div style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-        {children}
-      </div>
-    </motion.div>
+      {/* 2. VISUAL LAYER (The "Mesh")
+          -pointer-events: none ensures mouse passes through to the collider
+          - This layer tilts freely without affecting the hit area
+          - Z-Index 10 puts it visually inside, but behind the collider
+      */}
+      <motion.div
+        style={{ x, y, rotateX, rotateY, z: 10, pointerEvents: 'none', willChange: 'transform' }}
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ type: "tween", ease: "easeOut", duration: 0.8 }}
+        className="glass-card"
+      >
+        <div
+          style={{
+            padding: '3rem',
+            borderLeft: `1px solid ${color}`,
+            background: 'rgba(255,255,255,0.9)',
+            boxShadow: '0 20px 50px -20px rgba(0,0,0,0.1)',
+            transformStyle: 'preserve-3d',
+            overflow: 'hidden',
+            position: 'relative'
+          }}
+        >
+          {/* SCANNING BORDER GRADIENT */}
+          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: `linear-gradient(to bottom, transparent, ${color}, transparent)`, zIndex: 10 }} />
+
+          {/* HEADER */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid rgba(15,23,42,0.05)', paddingBottom: '1.5rem' }}>
+            <div>
+              <div className="mono" style={{ fontSize: '0.75rem', color: color, marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
+                <ScrambleText text={layer} />
+              </div>
+              <h4 style={{ fontFamily: 'Times New Roman, serif', fontWeight: 700, fontSize: '2rem', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+                {title}
+              </h4>
+              <div className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>{subtitle}</div>
+            </div>
+            {/* Trust Anchor */}
+            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />}
+          </div>
+
+          {/* STRATEGIC VALUE (Bold Serif) */}
+          <div style={{ marginBottom: '2rem' }}>
+            <p style={{ fontFamily: 'Times New Roman, serif', fontSize: '1.35rem', lineHeight: 1.4, color: 'var(--text-primary)', fontStyle: 'italic' }}>
+              "{strategicValue}"
+            </p>
+          </div>
+
+          {/* TECHNICAL SPECS (Sans) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(15,23,42,0.05)' }}>
+            {features && features.map((f, i) => (
+              <div key={i}>
+                <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.2rem', textTransform: 'uppercase' }}>{f.label}</strong>
+                <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{f.value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Context */}
+          <div style={{ marginTop: '2rem', fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+            {children}
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 };
-
 
 const CapabilityCard = ({ icon: Icon, title, desc, features, strategicValue, delay }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -327,7 +491,7 @@ const ServicesMatrix = () => {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
         {services.map((s, i) => (
           <CapabilityCard key={i} {...s} delay={i * 0.1} />
         ))}
@@ -360,6 +524,14 @@ const TechStackGrid = () => {
     }
   ];
 
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem 10rem' }}>
       <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '5rem' }}>Strategic Ecosystem.</h2>
@@ -368,20 +540,33 @@ const TechStackGrid = () => {
         {ecosystems.map((eco, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : (i % 2 === 0 ? -50 : 50) }} // Simplified anim for mobile
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ display: 'flex', flexDirection: i % 2 === 0 ? 'row' : 'row-reverse', alignItems: 'center', gap: '4rem' }}
+            style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : (i % 2 === 0 ? 'row' : 'row-reverse'),
+              alignItems: isMobile ? 'flex-start' : 'center',
+              gap: isMobile ? '2rem' : '4rem'
+            }}
           >
             {/* LABEL */}
-            <div style={{ flex: 1, textAlign: i % 2 === 0 ? 'right' : 'left' }}>
+            <div style={{ flex: 1, textAlign: isMobile ? 'left' : (i % 2 === 0 ? 'right' : 'left'), width: '100%' }}>
               <div className="mono" style={{ color: eco.color, fontSize: '1.2rem', marginBottom: '0.5rem' }}>/// {eco.name}</div>
-              <div style={{ height: '1px', width: '100%', background: `linear-gradient(to ${i % 2 === 0 ? 'left' : 'right'}, ${eco.color}, transparent)` }} />
+              <div style={{ height: '1px', width: '100%', background: `linear-gradient(to ${isMobile || i % 2 !== 0 ? 'right' : 'left'}, ${eco.color}, transparent)` }} />
             </div>
 
             {/* NODES 3D */}
-            <div style={{ flex: 2, display: 'flex', gap: '2rem', justifyContent: i % 2 === 0 ? 'flex-start' : 'flex-end', perspective: '1000px' }}>
+            <div style={{
+              flex: 2,
+              display: 'flex',
+              flexWrap: 'wrap', // Allow wrapping on small screens
+              gap: isMobile ? '1rem' : '2rem',
+              justifyContent: isMobile ? 'flex-start' : (i % 2 === 0 ? 'flex-start' : 'flex-end'),
+              perspective: '1000px',
+              width: '100%'
+            }}>
               {eco.techs.map((t, j) => (
                 <motion.div
                   key={j}
@@ -394,15 +579,15 @@ const TechStackGrid = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: '1rem',
-                    minWidth: '120px',
+                    minWidth: isMobile ? '100px' : '120px', // Smaller on mobile
                     cursor: 'pointer'
                   }}
                   whileHover={{ rotateX: 10, rotateY: 10 }}
                 >
                   <div style={{ filter: `drop-shadow(0 0 10px ${eco.color}60)` }}>
-                    <BrandLogo brand={t} size={40} color={['AWS', 'Azure', 'Google Cloud', 'Kubernetes'].includes(t) ? undefined : "var(--text-primary)"} />
+                    <BrandLogo brand={t} size={isMobile ? 32 : 40} color={['AWS', 'Azure', 'Google Cloud', 'Kubernetes'].includes(t) ? undefined : "var(--text-primary)"} />
                   </div>
-                  <span className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{t}</span>
+                  <span className="mono" style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', color: 'var(--text-secondary)' }}>{t}</span>
                 </motion.div>
               ))}
             </div>
@@ -416,8 +601,8 @@ const TechStackGrid = () => {
 const RoadmapTimeline = () => {
   const steps = [
     { year: '2024', title: 'Foundation', desc: 'CyberArk PAM Deployed (Vault Core)', icon: Shield, color: '#F59E0B' },
-    { year: '2025', title: 'Bridge', desc: 'StrondDM Zero Trust Network Access', icon: Server, color: '#34d399' },
-    { year: '2026', title: 'Zenith', desc: 'Akeyless + SailPoint AI Integration', icon: Rocket, color: 'var(--accent-purple)' },
+    { year: '2025', title: 'Bridge', desc: 'StrongDM Secure Access & Identity Fabric', icon: Server, color: '#34d399' },
+    { year: '2026', title: 'Zenith', desc: 'StrongDM, Akeyless & SailPoint Ecosystem', icon: Rocket, color: 'var(--accent-purple)' },
   ];
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 0' }}>
@@ -538,8 +723,8 @@ const HolographicLog = () => {
 const SplineRoadmap = () => {
   const steps = [
     { year: '2024', title: 'Foundation', desc: 'CyberArk PAM Deployed (Vault Core)', color: '#F59E0B' },
-    { year: '2025', title: 'Bridge', desc: 'Secure Access & Identity Fabric', color: '#34d399' },
-    { year: '2026', title: 'Zenith', desc: 'Autonomous Identity & AI Governance', color: 'var(--accent-purple)' },
+    { year: '2025', title: 'Bridge', desc: 'StrongDM Secure Access & Identity Fabric', color: '#34d399' },
+    { year: '2026', title: 'Zenith', desc: 'StrongDM, Akeyless & SailPoint Ecosystem', color: 'var(--accent-purple)' },
   ];
 
   return (
@@ -661,6 +846,7 @@ const App = () => {
       <CustomCursor />
       {/* <GrainOverlay /> REMOVED FOR PERFORMANCE */}
       <AuroraBackground />
+      <TacticalGrid />
 
       {/* --- HERO (Phase A: Authority) --- */}
       <section className="screen-section" style={{ alignItems: 'center', textAlign: 'center', paddingTop: '10vh', minHeight: '90vh' }}>
@@ -703,21 +889,18 @@ const App = () => {
 
       {/* --- STICKY ARCHITECTURE (Phase B: Breadth) --- */}
       <div className="sticky-container">
-        {/* LEFT: DYNAMIC DIAGRAM (Fixed) */}
+        {/* LEFT: SWISS ARCHITECTURE HUB */}
         <div className="sticky-visual">
-          <div className="glass-card" style={{ width: '100%', maxWidth: '600px', aspectRatio: '1/1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <AnimatedArchitecture />
+          <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <SwissHub phase={phase} />
+
             <div style={{ marginTop: '4rem', textAlign: 'center' }}>
-              <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
-                {phase === 0 && <span style={{ color: 'var(--accent-purple)' }}>The Governance Brain</span>}
-                {phase === 1 && <span style={{ color: 'var(--accent-alert)' }}>PAM Defense (Primary)</span>}
+              <div className="mono" style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', letterSpacing: '0.2em', marginBottom: '1rem' }}>ACTIVE SIGNAL</div>
+              <h2 style={{ fontSize: '2rem', margin: 0 }}>
+                {phase === 0 && <span style={{ color: 'var(--accent-purple)' }}>Autonomous Governance</span>}
+                {phase === 1 && <span style={{ color: 'var(--accent-alert)' }}>Privileged Defense</span>}
                 {phase === 2 && <span style={{ color: '#ec4899' }}>Universal Federation</span>}
               </h2>
-              <div className="mono" style={{ color: 'var(--text-tertiary)' }}>
-                {phase === 0 && "SailPoint AI • Entra ID (Governance)"}
-                {phase === 1 && "StrongDM (Access) • Akeyless (Vault)"}
-                {phase === 2 && "Ping Identity • SSO • Context"}
-              </div>
             </div>
           </div>
         </div>
@@ -727,114 +910,59 @@ const App = () => {
 
           {/* LAYER 01: GOVERNANCE */}
           <div className="content-block">
-            <div className="mono" style={{ color: 'var(--accent-purple)', marginBottom: '1rem' }}>/// LAYER 01: THE BRAIN</div>
-            <p className="text-editorial" style={{ marginBottom: '2rem' }}>
-              <strong>The Architect's View:</strong> Identity is only as secure as its governance. We deploy a self-healing brain.
-            </p>
-
-            <PitchCard
-              title="SailPoint AI"
-              subtitle="AUTONOMOUS GOVERNANCE"
-              icon={() => <BrandLogo brand="SailPoint" size={32} color="var(--accent-purple)" />}
+            <DossierCard
+              layer="/// LAYER 01: GOVERNANCE"
+              title="Identity Brain"
+              subtitle="SAILPOINT AI + MICROSOFT ENTRA"
+              logoPath="/logos/SailPoint.png"
               color="var(--accent-purple)"
-              strategicValue="Reduces audit preparation time by 60% via autonomous certification."
+              strategicValue="We deploy a self-healing brain that predicts access needs before users ask, reducing audit prep by 60%."
+              features={[
+                { label: "Core Engine", value: "SailPoint IdentityNow" },
+                { label: "Predictive Logic", value: "AI-Driven Role Mining" },
+                { label: "Policy Control", value: "Entra ID Conditional Access" }
+              ]}
             >
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Technical Superiority:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>AI-driven outlier detection & predictive role mining.</p>
-                </div>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Strategic Outcome:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>Eliminates rubber-stamp fatigue with high-fidelity context.</p>
-                </div>
-              </div>
-            </PitchCard>
-
-            <PitchCard
-              title="Entra ID (Azure)"
-              subtitle="POLICY DECISION POINT"
-              icon={() => <BrandLogo brand="Azure" size={32} color="#0078D4" />}
-              color="#0078D4"
-              strategicValue="Enables B2B ecosystem scaling with Zero-Trust borders."
-            >
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Technical Superiority:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>Real-time Risk-Based Conditional Access & PIM.</p>
-                </div>
-              </div>
-            </PitchCard>
+              <p>Identity is only as secure as its governance. We move you from "Rubber Stamp" approvals to high-fidelity, data-driven decisions.</p>
+            </DossierCard>
           </div>
 
-          {/* LAYER 02: PAM DEFENSE (The Muscle) */}
+          {/* LAYER 02: PAM DEFENSE */}
           <div className="content-block">
-            <div className="mono" style={{ color: 'var(--accent-alert)', marginBottom: '1rem' }}>/// LAYER 02: PAM DEFENSE</div>
-            <p className="text-editorial" style={{ marginBottom: '2rem' }}>
-              <strong>The Modern PAM Stack:</strong> We decouple "Access" from "Vaulting".
-              <br /><strong>StrongDM</strong> is the dynamic front door. <strong>Akeyless</strong> is the distributed vault.
-            </p>
-
-            <PitchCard
-              title="StrongDM"
-              subtitle="PRIMARY PAM (ACCESS)"
-              icon={() => <BrandLogo brand="StrongDM" size={32} color="#34d399" />}
-              color="#34d399"
-              strategicValue="ROI: Onboard engineers in seconds. Zero standing privileges."
-            >
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Why it's Primary:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>Legacy PAM is a bottleneck. StrongDM acts as a <strong>Protocol-Aware Proxy</strong> that grants ephemeral, Just-in-Time access to infrastructure without VPNs.</p>
-                </div>
-                <div style={{ display: 'grid', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                    <Check size={16} color="#34d399" /> <strong>True JIT Ephemerality</strong> (Tokens, not creds).
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                    <Check size={16} color="#34d399" /> <strong>Universal Protocol Support</strong> (K8s, SQL, RDP).
-                  </div>
-                </div>
-              </div>
-            </PitchCard>
-
-            <PitchCard
-              title="Akeyless Vault"
-              subtitle="SECRETS MANAGEMENT"
-              icon={() => <BrandLogo brand="Akeyless" size={32} color="var(--accent-alert)" />}
+            <DossierCard
+              layer="/// LAYER 02: PRIVILEGED DEFENSE"
+              title="Zero-Trust PAM"
+              subtitle="STRONGDM + AKEYLESS"
+              logoPath="/logos/StrongDM.png"
               color="var(--accent-alert)"
-              strategicValue="Eliminates 'Secret Zero' vulnerability across 3 Clouds."
+              strategicValue="Decoupling Access from Vaulting. We grant ephemeral, just-in-time access to infrastructure without VPNs."
+              features={[
+                { label: "Access Plane", value: "StrongDM (Protocol Proxy)" },
+                { label: "Secret Store", value: "Akeyless (Dist. Vault)" },
+                { label: "Velocity", value: "Onboard in < 30s" }
+              ]}
             >
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Technical Superiority:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>Distributed Fragments Cryptography (DFC™). A stateless, multi-cloud vault that compliments StrongDM's access layer.</p>
-                </div>
-              </div>
-            </PitchCard>
+              <p>Legacy PAM is a bottleneck. We replace static credentials with ephemeral tokens, eliminating the greatest risk vector in the modern stack: standing privileges.</p>
+            </DossierCard>
           </div>
 
           {/* LAYER 03: FEDERATION */}
           <div className="content-block">
-            <div className="mono" style={{ color: '#ec4899', marginBottom: '1rem' }}>/// LAYER 03: UNIVERSAL FEDERATION</div>
-            <p className="text-editorial" style={{ marginBottom: '2rem' }}>
-              The final mile. Seamless, orchestrated authentication across boundaries.
-            </p>
-
-            <PitchCard
-              title="Ping Identity"
-              subtitle="FEDERATION HUB"
-              icon={() => <BrandLogo brand="Ping Identity" size={32} color="#ec4899" />}
+            <DossierCard
+              layer="/// LAYER 03: UNIVERSAL FEDERATION"
+              title="Universal Directory"
+              subtitle="PING IDENTITY + ENTRA ID"
+              logoPath="/logos/Ping.png"
               color="#ec4899"
-              strategicValue="Seamless SSO that enforces health checks before login."
+              strategicValue="A borderless identity fabric that federates trust across all clouds, partners, and devices."
+              features={[
+                { label: "SSO Engine", value: "PingFederate / PingOne" },
+                { label: "Context", value: "Risk-Based Auth" },
+                { label: "Standards", value: "OIDC / SAML 2.0" }
+              ]}
             >
-              <div style={{ display: 'grid', gap: '1rem' }}>
-                <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>Technical Superiority:</strong>
-                  <p style={{ margin: '0.2rem 0', fontSize: '0.95rem' }}>OIDC/SAML Orchestration with fine-grained authorization policies.</p>
-                </div>
-              </div>
-            </PitchCard>
+              <p>In a perimeter-less world, Identity is the new firewall. We architect a seamless, single-sign-on experience that follows the user.</p>
+            </DossierCard>
           </div>
 
         </div>
@@ -848,10 +976,6 @@ const App = () => {
 
       {/* --- TECH STACK GRID --- */}
       <TechStackGrid />
-
-
-
-      // ... existing code ...
 
       {/* --- LIVE WORKFLOW (Phase D: Depth) --- */}
       <section className="screen-section" style={{ flexDirection: 'row', gap: '4rem', minHeight: 'auto', padding: '4rem 2rem 0', flexWrap: 'wrap' }}>
