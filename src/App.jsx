@@ -636,12 +636,12 @@ const TechStackGrid = () => {
                     justifyContent: 'space-between',
                     minHeight: '280px' // Ensure uniform height for neat grid
                   }}
-                  whileHover={{ y: -5, boxShadow: `0 10px 30px -10px ${eco.color}40` }}
+                  whileHover={{ y: -5, boxShadow: `0 0 30px -5px ${eco.color}30` }}
                 >
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
                       <BrandLogo brand={t.name} size={40} color={['AWS', 'Azure', 'Google Cloud', 'Kubernetes'].includes(t.name) ? undefined : "var(--text-primary)"} />
-                      <div className="mono" style={{ fontSize: '0.7rem', color: eco.color, border: `1px solid ${eco.color}`, padding: '4px 8px', borderRadius: '4px' }}>
+                      <div className="mono" style={{ fontSize: '0.7rem', color: eco.color, border: `1px solid ${eco.color}`, padding: '4px 8px', borderRadius: '4px', background: `${eco.color}10` }}>
                         {t.role}
                       </div>
                     </div>
