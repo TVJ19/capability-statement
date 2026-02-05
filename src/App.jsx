@@ -484,7 +484,7 @@ const CapabilityCard = ({ icon: Icon, title, desc, features, strategicValue, del
             <Icon size={30} color="var(--accent-cyan)" />
           </div>
           <div className="mono" style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)', border: '1px solid var(--accent-cyan)', padding: '4px 8px', borderRadius: '4px', background: 'rgba(34, 211, 238, 0.05)' }}>
-            LEVEL 5 MATURITY
+            THE SOVEREIGN STANDARD
           </div>
         </div>
 
