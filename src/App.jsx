@@ -1020,9 +1020,22 @@ const App = () => {
             <CipherReveal text="GLOBAL CAPABILITY STATEMENT FOR FORTUNE 500" delay={0.5} />
             <span style={{ fontSize: '0.6em' }}>s</span>
           </div>
-          <h1 className="hero-text">
+          <h1 className="hero-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: '0.9', gap: '0.5rem' }}>
             <CipherReveal text="THE IDENTITY" delay={1} />
-            <br />
+
+            {/* THE NEURAL BRIDGE */}
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: '120px', opacity: 1 }}
+              transition={{ delay: 2, duration: 1.5, type: 'spring' }}
+              style={{
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, var(--accent-cyan), transparent)',
+                boxShadow: '0 0 10px var(--accent-cyan)',
+                margin: '0.2rem 0'
+              }}
+            />
+
             <CipherReveal text="ZEITGEIST." delay={1.5} />
           </h1>
           <p className="text-editorial" style={{ margin: '2rem auto', fontSize: '1.4rem', color: 'var(--text-primary)' }}>
