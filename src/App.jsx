@@ -76,6 +76,110 @@ const TacticalGrid = () => {
   );
 };
 
+// --- REVOLUTIONARY VECTORS: CIPHER TEXT ---
+const CipherReveal = ({ text, delay = 0, className, style }) => {
+  const [display, setDisplay] = useState('');
+  const [started, setStarted] = useState(false);
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+
+  useEffect(() => {
+    if (!started) return;
+
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setDisplay(
+        text
+          .split('')
+          .map((letter, index) => {
+            if (index < iteration) {
+              return text[index];
+            }
+            return characters[Math.floor(Math.random() * characters.length)];
+          })
+          .join('')
+      );
+
+      if (iteration >= text.length) {
+        clearInterval(interval);
+      }
+
+      iteration += 1 / 3; // Speed of decipher
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [started, text]);
+
+  return (
+    <motion.div
+      className={className}
+      style={style}
+      whileInView={() => {
+        setTimeout(() => setStarted(true), delay * 1000);
+      }}
+      viewport={{ once: true }}
+    >
+      {display || text.split('').map(() => characters[Math.floor(Math.random() * characters.length)]).join('')}
+    </motion.div>
+  );
+};
+
+// --- REVOLUTIONARY VECTORS: HOLO GLOBE (WebGL) ---
+// Using R3F + Points for a "Threat Map" aesthetic
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
+import * as random from 'maath/random/dist/maath-random.esm';
+
+const HoloGlobe = (props) => {
+  const ref = useRef();
+  // Generate 2000 random points on a sphere
+  const [sphere] = useState(() => random.inSphere(new Float32Array(2000), { radius: 1.5 }));
+
+  useFrame((state, delta) => {
+    ref.current.rotation.x -= delta / 10;
+    ref.current.rotation.y -= delta / 15;
+  });
+
+  return (
+    <group rotation={[0, 0, Math.PI / 4]}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial
+          transparent
+          color="#22D3EE"
+          size={0.02}
+          sizeAttenuation={true}
+          depthWrite={false}
+        />
+      </Points>
+    </group>
+  );
+};
+
+const ThreatMap = () => {
+  return (
+    <div style={{ width: '100%', height: '400px', position: 'relative', margin: '0 auto 2rem' }}>
+      <Canvas camera={{ position: [0, 0, 3] }}>
+        <ambientLight intensity={0.5} />
+        <HoloGlobe />
+      </Canvas>
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        color: 'var(--accent-cyan)',
+        fontSize: '0.7rem',
+        fontFamily: 'JetBrains Mono',
+        textAlign: 'center',
+        textShadow: '0 0 10px var(--accent-cyan)'
+      }}>
+                /// LIVE THREAT INTEL: ACTIVE
+      </div>
+    </div>
+  )
+}
+
+
+/* OLD VECTOR GLOBE REPLACED BY THREAT MAP
 const VectorGlobe = () => {
   const time = useTime();
   const rotateX = useTransform(time, [0, 10000], [0, 360], { clamp: false });
@@ -109,6 +213,7 @@ const VectorGlobe = () => {
     </div>
   );
 };
+*/
 
 const StatsGrid = () => {
   const stats = [
@@ -927,17 +1032,19 @@ const App = () => {
 
       {/* --- HERO (Phase A: Authority) --- */}
       <section className="screen-section" style={{ alignItems: 'center', textAlign: 'center', paddingTop: '10vh', minHeight: '90vh' }}>
-        <VectorGlobe />
+        <ThreatMap />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
           <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', letterSpacing: '0.3em' }}>
-            KR3 INFOSYS // GLOBAL CAPABILITY
+            <CipherReveal text="KR3 INFOSYS // GLOBAL CAPABILITY" delay={0.5} />
           </div>
           <h1 className="hero-text">
-            THE IDENTITY<br /> ZEITGEIST.
+            <CipherReveal text="THE IDENTITY" delay={1} />
+            <br />
+            <CipherReveal text="ZEITGEIST." delay={1.5} />
           </h1>
           <p className="text-editorial" style={{ margin: '2rem auto', fontSize: '1.4rem', color: 'var(--text-primary)' }}>
             We don't just manage access. We architect the <strong>resilient nervous system</strong> of your digital enterprise.
