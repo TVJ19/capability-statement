@@ -385,104 +385,68 @@ const ScrambleText = ({ text }) => {
   return <span>{display}</span>;
 }
 
+// --- DYNAMIC COMPONENTS ---
+import HoloCard from './components/HoloCard';
+import SentinelTerminal from './components/SentinelTerminal';
+
 const DossierCard = ({ layer, title, subtitle, logoPath, color, strategicValue, features, children }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-100, 100], [5, -5]);
-  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
-
   return (
-    // LAYOUT CONTAINER + PERSPECTIVE
-    <div style={{ position: 'relative', marginBottom: '4rem', perspective: '1000px' }}>
-
-      {/* 1. COLLIDER OVERLAY (The "Hit Box")
-          - Static 2D plane (no transform)
-          - Transparent but captures all mouse events
-          - Z-Index 50 ensures it stays on top of the tilting card
-      */}
+    <HoloCard className="dossier-card-wrapper">
       <div
-        style={{ position: 'absolute', inset: 0, zIndex: 50, cursor: 'default' }}
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          x.set(e.clientX - rect.left - rect.width / 2);
-          y.set(e.clientY - rect.top - rect.height / 2);
+        style={{
+          padding: '3rem',
+          borderLeft: `2px solid ${color}`,
+          borderTop: `1px solid ${color}40`, // Tech Bracket top
+          background: 'rgba(15, 23, 42, 0.6)', // Dark Glass
+          boxShadow: `0 0 30px -10px ${color}20`, // Colored Glow
+          overflow: 'hidden',
+          position: 'relative'
         }}
-        onMouseLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
-      />
-
-      {/* 2. VISUAL LAYER (The "Mesh")
-          -pointer-events: none ensures mouse passes through to the collider
-          - This layer tilts freely without affecting the hit area
-          - Z-Index 10 puts it visually inside, but behind the collider
-      */}
-      <motion.div
-        style={{ x, y, rotateX, rotateY, z: 10, pointerEvents: 'none', willChange: 'transform' }}
-        initial={{ opacity: 0, x: 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ type: "tween", ease: "easeOut", duration: 0.8 }}
-        className="glass-card"
       >
-        <div
-          style={{
-            padding: '3rem',
-            borderLeft: `2px solid ${color}`,
-            borderTop: `1px solid ${color}40`, // Tech Bracket top
-            background: 'rgba(15, 23, 42, 0.6)', // Dark Glass
-            boxShadow: `0 0 30px -10px ${color}20`, // Colored Glow
-            transformStyle: 'preserve-3d',
-            overflow: 'hidden',
-            position: 'relative'
-          }}
-        >
-          {/* SCANNING BORDER GRADIENT */}
-          <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: `linear-gradient(to bottom, transparent, ${color}, transparent)`, zIndex: 10, opacity: 0.8 }} />
+        {/* SCANNING BORDER GRADIENT */}
+        <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: '4px', background: `linear-gradient(to bottom, transparent, ${color}, transparent)`, zIndex: 10, opacity: 0.8 }} />
 
-          {/* HUD CORNER BRACKET (Bottom Right) */}
-          <div style={{ position: 'absolute', bottom: '0', right: '0', width: '20px', height: '20px', borderBottom: `2px solid ${color}`, borderRight: `2px solid ${color}`, opacity: 0.5 }} />
+        {/* HUD CORNER BRACKET (Bottom Right) */}
+        <div style={{ position: 'absolute', bottom: '0', right: '0', width: '20px', height: '20px', borderBottom: `2px solid ${color}`, borderRight: `2px solid ${color}`, opacity: 0.5 }} />
 
-          {/* HEADER */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1.5rem' }}>
-            <div>
-              <div className="mono" style={{ fontSize: '0.75rem', color: color, marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
-                <ScrambleText text={layer} />
-              </div>
-              <h4 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '2rem', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em', textShadow: `0 0 20px ${color}40` }}>
-                {title}
-              </h4>
-              <div className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>{subtitle}</div>
+        {/* HEADER */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1.5rem' }}>
+          <div>
+            <div className="mono" style={{ fontSize: '0.75rem', color: color, marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
+              <ScrambleText text={layer} />
             </div>
-            {/* Trust Anchor */}
-            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: 'grayscale(1) invert(1)', mixBlendMode: 'lighten', opacity: 0.9 }} />}
+            <h4 style={{ fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, fontSize: '2rem', margin: 0, color: 'var(--text-primary)', letterSpacing: '-0.02em', textShadow: `0 0 20px ${color}40` }}>
+              {title}
+            </h4>
+            <div className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>{subtitle}</div>
           </div>
-
-          {/* STRATEGIC VALUE (Bold) */}
-          <div style={{ marginBottom: '2rem' }}>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.25rem', lineHeight: 1.5, color: 'var(--text-primary)', fontWeight: 400 }}>
-              <span style={{ color: color, marginRight: '0.5rem' }}>//</span> "{strategicValue}"
-            </p>
-          </div>
-
-          {/* TECHNICAL SPECS (Sans) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            {features && features.map((f, i) => (
-              <div key={i}>
-                <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.2rem', textTransform: 'uppercase', fontFamily: 'JetBrains Mono' }}>{f.label}</strong>
-                <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{f.value}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Context */}
-          <div style={{ marginTop: '2rem', fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            {children}
-          </div>
+          {/* Trust Anchor */}
+          {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: 'grayscale(1) invert(1)', mixBlendMode: 'lighten', opacity: 0.9 }} />}
         </div>
-      </motion.div>
-    </div>
+
+        {/* STRATEGIC VALUE (Bold) */}
+        <div style={{ marginBottom: '2rem' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '1.25rem', lineHeight: 1.5, color: 'var(--text-primary)', fontWeight: 400 }}>
+            <span style={{ color: color, marginRight: '0.5rem' }}>//</span> "{strategicValue}"
+          </p>
+        </div>
+
+        {/* TECHNICAL SPECS (Sans) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          {features && features.map((f, i) => (
+            <div key={i}>
+              <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-tertiary)', marginBottom: '0.2rem', textTransform: 'uppercase', fontFamily: 'JetBrains Mono' }}>{f.label}</strong>
+              <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>{f.value}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Context */}
+        <div style={{ marginTop: '2rem', fontSize: '1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+          {children}
+        </div>
+      </div>
+    </HoloCard>
   );
 };
 
@@ -597,7 +561,7 @@ const ServicesMatrix = () => {
         <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem' }}>/// STRATEGIC CAPABILITY CORE</div>
         <h2 className="section-title">The Zenith Matrix.</h2>
         <p className="text-editorial" style={{ margin: '0 auto' }}>
-          Elite-tier engineering capabilities. We operate at <strong>Level 5 Maturity</strong> across the entire stack.
+          Elite-tier engineering capabilities. We operate at <strong>The Sovereign Standard</strong> across the entire stack.
         </p>
       </div>
 
@@ -770,7 +734,21 @@ const TechStackGrid = () => {
       </div>
     </div>
   );
-}
+};
+
+{/* --- FOOTER --- */ }
+<footer style={{ background: 'var(--bg-secondary)', padding: "4rem 2rem", textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+  <SentinelTerminal />
+  <div style={{ marginTop: '4rem', opacity: 0.6 }}>
+    <p className="mono" style={{ fontSize: '0.9rem', color: 'var(--text-tertiary)' }}>
+      KR3 INFOSYS // SECURING THE FUTURE<br />
+      Level 10, 520 Bourke Street, Melbourne VIC 3000
+    </p>
+    <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+      © 2026 KR3 Information Systems. All Systems Nominal.
+    </div>
+  </div>
+</footer>
 
 const RoadmapTimeline = () => {
   const steps = [
@@ -1038,8 +1016,9 @@ const App = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', letterSpacing: '0.3em' }}>
-            <CipherReveal text="KR3 INFOSYS // GLOBAL CAPABILITY" delay={0.5} />
+          <div className="mono" style={{ color: 'var(--accent-cyan)', marginBottom: '1rem', letterSpacing: '0.3em', display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
+            <CipherReveal text="GLOBAL CAPABILITY STATEMENT FOR FORTUNE 500" delay={0.5} />
+            <span style={{ fontSize: '0.6em' }}>s</span>
           </div>
           <h1 className="hero-text">
             <CipherReveal text="THE IDENTITY" delay={1} />
