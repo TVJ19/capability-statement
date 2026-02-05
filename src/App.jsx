@@ -351,7 +351,7 @@ const DossierCard = ({ layer, title, subtitle, logoPath, color, strategicValue, 
               <div className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.5rem' }}>{subtitle}</div>
             </div>
             {/* Trust Anchor */}
-            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1) opacity(0.8)' }} />}
+            {logoPath && <img src={logoPath} alt="Partner Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain', filter: 'grayscale(1) invert(1)', mixBlendMode: 'lighten', opacity: 0.9 }} />}
           </div>
 
           {/* STRATEGIC VALUE (Bold) */}
@@ -863,14 +863,22 @@ const AuthenticLogoMarquee = () => {
         style={{ display: 'flex', gap: isMobile ? '3rem' : '6rem', width: 'fit-content', paddingLeft: isMobile ? '3rem' : '6rem' }}
       >
         {marqueeLogos.map((logo, i) => (
-          <div key={i} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', height: isMobile ? '50px' : '80px', filter: 'grayscale(100%) opacity(0.7)', transition: 'all 0.3s ease' }}
-            onMouseEnter={(e) => { e.currentTarget.style.filter = 'grayscale(0%) opacity(1)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.filter = 'grayscale(100%) opacity(0.7)'; e.currentTarget.style.transform = 'scale(1)'; }}
+          <div key={i} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', height: isMobile ? '50px' : '80px', transition: 'all 0.3s ease' }}
+            onMouseEnter={(e) => { e.currentTarget.querySelector('img').style.opacity = '1'; e.currentTarget.style.transform = 'scale(1.1)'; }}
+            onMouseLeave={(e) => { e.currentTarget.querySelector('img').style.opacity = '0.7'; e.currentTarget.style.transform = 'scale(1)'; }}
           >
             <img
               src={`/logos/${logo}`}
               alt={logo.replace('.png', '')}
-              style={{ height: isMobile ? '30px' : '50px', width: 'auto', objectFit: 'contain' }}
+              style={{
+                height: isMobile ? '30px' : '50px',
+                width: 'auto',
+                objectFit: 'contain',
+                filter: 'grayscale(1) invert(1)',
+                mixBlendMode: 'lighten',
+                opacity: 0.7,
+                transition: 'opacity 0.3s'
+              }}
             />
           </div>
         ))}
